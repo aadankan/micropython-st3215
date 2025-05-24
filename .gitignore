@@ -25,7 +25,8 @@ share/python-wheels/
 MANIFEST
 
 # mkdocs documentation
-docs/_build/
+docs/
+_build/
 
 # Environments
 .env
@@ -38,3 +39,4 @@ venv.bak/
 
 # mkdocs documentation
 /site
+mkdocs.yml
