@@ -1,0 +1,8 @@
+{
+  "version": "0.1.0",
+  "urls": [
+    ["st3215/__init__.py", "github:aadankan/micropython-st3215/st3215/__init__.py"],
+    ["st3215/high_level.py", "github:aadankan/micropython-st3215/st3215/high_level.py"],
+    ["st3215/low_level.py", "github:aadankan/micropython-st3215/st3215/low_level.py"]
+  ]
+}
