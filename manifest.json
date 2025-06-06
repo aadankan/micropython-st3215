@@ -1,0 +1,7 @@
+{
+  "version": "0.1.0",
+  "files": [
+    "st3215/high_level.py",
+    "st3215/low_level.py"
+  ]
+}

@@ -35,11 +35,13 @@ class ServoLowLevel:
     def __init__(self, id, uart_num, tx_pin, rx_pin, baudrate):
         """
         Initializes the ServoLowLevel class.
-        :param id: The ID of the servo. If 0, it will broadcast a ping to find the servo.
-        :param uart_num: The UART number to use (e.g., 1, 2).
-        :param tx_pin: The TX pin for the UART.
-        :param rx_pin: The RX pin for the UART.
-        :param baudrate: The baud rate for the UART communication.
+
+        Parameters:
+            id (int): The ID of the servo motor. If 0, performs broadcast ping to detect servo.
+            uart_num (int): The UART number to use for communication.
+            tx_pin (int): The TX (transmit) pin for UART communication.
+            rx_pin (int): The RX (receive) pin for UART communication.
+            baudrate (int): The baud rate for UART communication.
         """
         self.uart = UART(uart_num, baudrate=baudrate, bits=8, parity=None, tx=tx_pin, rx=rx_pin)
         if id == 0:
@@ -50,27 +52,44 @@ class ServoLowLevel:
 
     @property
     def register(self):
-        """Returns the register value from the buffer."""
+        """
+        Extracts and returns register value from response buffer.
+
+        Returns:
+            bytes: Register data from the buffer.
+
+        Raises:
+            ValueError: If buffer is too short.
+        """
         if len(self.buf) < 6:
             raise ValueError("Buffer too short to extract value")
         return self.buf[5:-1]
 
     def read_servo(self):
-        """Reads data from the servo and returns it as a byte string."""
+        """
+        Reads incoming data from the UART interface.
+
+        Returns:
+            bytes: The data read from the servo or empty byte string if nothing is read.
+        """
         self.buf = self.uart.read() or b''
         return self.buf if self.buf else b''
 
     def flush(self):
-        """Flushes the UART buffer."""
+        """
+        Flushes the UART buffer to discard any existing data.
+        """
         self.uart.read()
         self.buf = b''
 
     def send_packet(self, instruction, parameters=None, broadcast=False):
         """
-        Sends a packet to the servo with the specified instruction and parameters.
-        :param instruction: The instruction to send. (e.g., INST_PING, INST_READ, etc.)
-        :param parameters: Optional parameters to include in the packet.
-        :return: The response from the servo.
+        Constructs and sends a packet to the servo motor.
+
+        Parameters:
+            instruction (int): The instruction byte (e.g., INST_PING, INST_READ).
+            parameters (list, optional): Optional list of parameters for the instruction.
+            broadcast (bool, optional): Whether to broadcast the packet to all servos. Defaults to False.
         """
 
         _id = BROADCAST_ID if broadcast else self._id
@@ -110,8 +129,10 @@ class ServoLowLevel:
     
     def broadcast_ping(self) -> bytes:
         """
-        Sends a ping command to all servos and returns the ID of the responding servo.
-        :return: The ID of the servo that responds, or -1 if no response is received.
+        Sends a ping to all servos and checks for a response.
+
+        Returns:
+            bytes: The ID of the responding servo or b'-1' if no response is received.
         """
         self.send_packet(INST_PING, broadcast=True)
         error = self.ack()
@@ -127,8 +148,10 @@ class ServoLowLevel:
 
     def iterate_ping(self):
         """
-        Iterates through all possible IDs and pings each one.
-        :return: The ID of the servo that responds.
+        Pings all possible servo IDs (1–254) to find connected servos.
+
+        Returns:
+            None
         """
         __id = self._id
         connected_ids = []
@@ -148,8 +171,16 @@ class ServoLowLevel:
         
     def ack(self) -> int:
         """
-        Receives and parses response from servo
-        :return: Tuple of (error, parameters) or None if error occurs
+        Reads and validates a response packet from the servo.
+
+        Returns:
+            int: Error code indicating the result of the acknowledgement:
+                0 - Success
+                ERROR_NO_RESPONSE - No response received
+                ERROR_RESPONSE_TOO_SHORT - Response too short
+                ERROR_INVALID_HEADER - Invalid header in response
+                ERROR_LENGTH_MISMATCH - Declared length does not match actual
+                ERROR_CHECKSUM - Checksum mismatch
         """
         response = self.read_servo()
         if not response:

@@ -116,8 +116,12 @@ class HexUtils:
     def get_16_bit_value(self, value):
         """
         Converts a 16-bit signed integer to a list of two bytes.
-        :param value: The 16-bit signed integer to convert.
-        :return: A list of two bytes representing the value.
+
+        Parameters:
+            value (int): The 16-bit signed integer to convert.
+
+        Returns:
+            list[int]: Two-byte representation of the value.
         """
         if value < 0:
             value = -value
@@ -126,6 +130,17 @@ class HexUtils:
         return [value & 0xFF, (value >> 8) & 0xFF]
     
     def extract_signed_int_from_bytes(self, byte_data, sign_bit_position=None, lsb_first=True):
+        """
+        Extracts a signed integer from byte data.
+
+        Parameters:
+            byte_data (bytes): The bytes to extract the integer from.
+            sign_bit_position (int, optional): The bit position used for the sign.
+            lsb_first (bool): Whether the byte order is LSB first.
+
+        Returns:
+            int: The extracted signed integer.
+        """
         if not byte_data:
             raise ValueError("byte_data cannot be empty")
 
@@ -148,6 +163,15 @@ class HexUtils:
 class ServoReadUtils:
 
     def read_register(self, reg: int):
+        """
+        Reads the value of a given register.
+
+        Parameters:
+            reg (int): The register address to read from.
+
+        Returns:
+            int or None: The processed value from the register or None on error.
+        """
         length = REG_MAP[reg]['bytes']
         multiplayer = REG_MAP[reg]['multiplayer']
         self.send_packet(INST_READ, [reg, length])
@@ -157,6 +181,16 @@ class ServoReadUtils:
         return self.extract_signed_int_from_bytes(self.register) * multiplayer
     
     def read_registers(self, registers: list, format: str='list'):
+        """
+        Reads multiple registers and returns their values.
+
+        Parameters:
+            registers (list): List of register addresses to read.
+            format (str): Output format: 'list' or 'dict'.
+
+        Returns:
+            list or dict: Register values as list or dictionary.
+        """
         if format == 'list':
             vals = []
             for reg in registers:
@@ -171,30 +205,39 @@ class ServoReadUtils:
             return ret
 
     def get_mode(self):
+        """Returns the current operation mode."""
         return self.read_register(REG_OPERATION_MODE)
     
     def get_position(self) -> int:
+        """Returns the current position."""
         return self.read_register(REG_CURRENT_LOCATION)
 
     def get_speed(self):
+        """Returns the current speed."""
         return self.read_register(REG_CURRENT_SPEED)
 
     def get_load(self):
+        """Returns the current load."""
         return self.read_register(REG_CURRENT_LOAD)
 
     def get_voltage(self):
+        """Returns the current voltage."""
         return self.read_register(REG_CURRENT_VOLTAGE)
 
     def get_current(self):
+        """Returns the current consumption."""
         return self.read_register(REG_CURRENT_CURRENT)
 
     def get_temperature(self):
+        """Returns the current temperature."""
         return self.read_register(REG_CURRENT_TEMPERATURE)
     
     def get_protection_status(self):
         """
         Returns the protection status of the servo.
-        :return: A dictionary containing the protection status.
+
+        Returns:
+            dict: Dictionary with individual protection flags.
         """
         status = self.read_register(REG_SERVO_STATUS)
         return {
@@ -206,26 +249,70 @@ class ServoReadUtils:
         }
 
     def get_state(self, format: str='dict'):
+        """
+        Returns the state of the servo.
+
+        Parameters:
+            format (str): 'dict' or 'list'.
+
+        Returns:
+            dict or list: The current state information.
+        """
         return self.read_registers(STATE_REGISTERS, format=format)
 
     def get_status(self, format: str='dict'):
+        """
+        Returns the status of the servo.
+
+        Parameters:
+            format (str): 'dict' or 'list'.
+
+        Returns:
+            dict or list: The current status information.
+        """
         return self.read_registers(STATUS_REGISTERS, format=format)
 
 
 class ServoWriteUtils:
 
     def validate_register_value(self, reg: int, value: int):
+        """
+        Validates a value against the register's constraints.
+
+        Parameters:
+            reg (int): Register address.
+            value (int): Value to validate.
+        """
         reg_info = REG_MAP[reg]
         if not (reg_info['min'] <= value <= reg_info['max']):
             raise ValueError(f"Value {value} for register {reg} is out of bounds ({reg_info['min']} - {reg_info['max']})")
 
     def validate(self, value, min, max):
+        """
+        Validates whether a value is within the specified bounds.
+
+        Parameters:
+            value (int): Value to check.
+            min (int): Minimum allowed value.
+            max (int): Maximum allowed value.
+        """
         if value is None:
             raise ValueError("Value cannot be None")
         if not (min <= value <= max):
             raise ValueError(f"Value {value} is out of bounds ({min} - {max})")
 
     def set_register(self, reg: int, value: int, async_write: bool = False):
+        """
+        Writes a value to a register.
+
+        Parameters:
+            reg (int): Register address.
+            value (int): Value to write.
+            async_write (bool): Whether to queue the command.
+
+        Returns:
+            int: 0 if successful, otherwise an error code.
+        """
         write = INST_REG_WRITE if async_write else INST_WRITE
         self.validate_register_value(reg, value)
         self.send_packet(write, [reg, value])
@@ -235,21 +322,36 @@ class ServoWriteUtils:
         return 0
     
     def async_set_regiser(self, reg: int, value: int):
+        """
+        Writes a value to a register asynchronously.
+
+        Parameters:
+            reg (int): Register address.
+            value (int): Value to write.
+
+        Returns:
+            int: Result of the write.
+        """
         return self.set_register(reg, value, async_write=True)
 
     def set_id(self, new_id: int):
+        """Sets a new ID for the servo."""
         return self.set_register(REG_ID, new_id)
 
     def lock_mark(self):
+        """Locks servo mark for configuration protection."""
         return self.set_register(REG_LOCK_MARK, 0x00)
     
     def unlock_mark(self):
+        """Unlocks servo mark for configuration."""
         return self.set_register(REG_LOCK_MARK, 0x01)
 
     def tork_lock(self):
+        """Enables torque output."""
         return self.set_register(REG_TORQUE_SWITCH, 0x01)
     
     def tork_unlock(self):
+        """Disables torque output."""
         return self.set_register(REG_TORQUE_SWITCH, 0x00)
 
     def tork_auto(self):
@@ -259,23 +361,48 @@ class ServoWriteUtils:
         return self.set_register(REG_TORQUE_SWITCH, 128)
     
     def servo_mode(self):
+        """Sets the servo to position control mode."""
         return self.set_register(REG_OPERATION_MODE, 0x00)
     
     def speed_mode(self):
+        """Sets the servo to speed control mode."""
         return self.set_register(REG_OPERATION_MODE, 0x01)
     
     def pwm_mode(self):
+        """Sets the servo to PWM control mode."""
         return self.set_register(REG_OPERATION_MODE, 0x02)
     
     def step_mode(self):
+        """Sets the servo to step mode."""
         return self.set_register(REG_OPERATION_MODE, 0x03)
 
     def set_speed(self, speed: int, reverse: bool = False):
+        """
+        Sets the speed of the servo.
+
+        Parameters:
+            speed (int): Speed value.
+            reverse (bool): Whether the speed is in reverse.
+
+        Returns:
+            int: Result of the operation.
+        """
         # if reverse:
         #   speed |= (1 << 15)
         return self.set_register(REG_RUNNING_SPEED, speed)
     
     def move_target_location(self, position, delta_time=None, speed=None):
+        """
+        Moves the servo to a target location.
+
+        Parameters:
+            position (int): Target position.
+            delta_time (int, optional): Time delay (SC model).
+            speed (int, optional): Movement speed (ST model).
+
+        Returns:
+            int: Result of the operation.
+        """
         if position < 0:
             position = -position
             position |= (1 << 15)
@@ -291,6 +418,17 @@ class ServoWriteUtils:
         return self.ack()
     
     def move_acceleration(self, position: int, acceleration: int=None, speed: int=None):
+        """
+        Moves the servo using acceleration profile.
+
+        Parameters:
+            position (int): Target position.
+            acceleration (int, optional): Acceleration value.
+            speed (int, optional): Speed value.
+
+        Returns:
+            int: Result of the operation.
+        """
         if position < 0:
             position = -position
             position |= (1 << 15)
@@ -309,6 +447,16 @@ class ServoWriteUtils:
 class ST3215(ServoLowLevel, ServoReadUtils, ServoWriteUtils, HexUtils):
 
     def __init__(self, id=DEFAULT_SERVO_ID, uart_num=DEFAULT_UART_NUM, tx_pin=DEFAULT_S_TXD, rx_pin=DEFAULT_S_RXD, baudrate=DEFAULT_BAUDRATE):
+        """
+        Initializes the ST3215 servo class.
+
+        Parameters:
+            id (int): The servo ID.
+            uart_num (int): UART number.
+            tx_pin (int): TX pin.
+            rx_pin (int): RX pin.
+            baudrate (int): Communication baud rate.
+        """
         super().__init__(id, uart_num, tx_pin, rx_pin, baudrate)
         ack = self.ping()
         if ack != 0:
@@ -335,15 +483,19 @@ class ST3215(ServoLowLevel, ServoReadUtils, ServoWriteUtils, HexUtils):
     def ping(self):
         """
         Pings the servo to check if it is responsive.
-        :return: Zero if successful, or an error code.
+
+        Returns:
+            int: 0 if successful, or an error code.
         """
         self.send_packet(INST_READ, [REG_ID, 0x01])
         return self.ack()
     
     def version(self):
         """
-        Returns the firmware version of the servo.
-        :return: A dictionary containing the firmware and servo version.
+        Returns the firmware and servo version.
+
+        Returns:
+            dict: Firmware and servo version info.
         """
         firmware_major = self.read_register(REG_FIRMWARE_MAJOR_VERSION)
         firmware_minor = self.read_register(REG_FIRMWARE_SUB_VERSION)
@@ -354,7 +506,9 @@ class ST3215(ServoLowLevel, ServoReadUtils, ServoWriteUtils, HexUtils):
     def reg_map(self):
         """
         Returns the register map of the servo.
-        :return: A dictionary containing the register map.
+
+        Returns:
+            dict: Register metadata.
         """
         return REG_MAP
 
