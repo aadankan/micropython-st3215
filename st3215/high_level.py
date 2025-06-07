@@ -122,7 +122,7 @@ class HexUtils:
             value (int): The 16-bit signed integer to convert.
 
         Returns:
-            list[int]: Two-byte representation of the value.
+           value (List[int]): Two-byte representation of the value.
         """
         if value < 0:
             value = -value
@@ -140,7 +140,7 @@ class HexUtils:
             lsb_first (bool): Whether the byte order is LSB first.
 
         Returns:
-            int: The extracted signed integer.
+            data (int): The extracted signed integer.
         """
         if not byte_data:
             raise ValueError("byte_data cannot be empty")
@@ -171,7 +171,7 @@ class ServoReadUtils:
             reg (int): The register address to read from.
 
         Returns:
-            int or None: The processed value from the register or None on error.
+            register (int or None): The processed value from the register or None on error.
         """
         length = REG_MAP[reg]['bytes']
         multiplayer = REG_MAP[reg]['multiplayer']
@@ -190,7 +190,7 @@ class ServoReadUtils:
             format (str): Output format: 'list' or 'dict'.
 
         Returns:
-            list or dict: Register values as list or dictionary.
+            registers (list or dict): Register values as list or dictionary.
         """
         if format == 'list':
             vals = []
@@ -238,7 +238,7 @@ class ServoReadUtils:
         Returns the protection status of the servo.
 
         Returns:
-            dict: Dictionary with individual protection flags.
+            protection_status (dict): Dictionary with individual protection flags.
         """
         status = self.read_register(REG_SERVO_STATUS)
         return {
@@ -257,7 +257,7 @@ class ServoReadUtils:
             format (str): 'dict' or 'list'.
 
         Returns:
-            dict or list: The current state information.
+            state (dict or list): The current state information.
         """
         return self.read_registers(STATE_REGISTERS, format=format)
 
@@ -269,7 +269,7 @@ class ServoReadUtils:
             format (str): 'dict' or 'list'.
 
         Returns:
-            dict or list: The current status information.
+            status (dict or list): The current status information.
         """
         return self.read_registers(STATUS_REGISTERS, format=format)
 
@@ -312,7 +312,7 @@ class ServoWriteUtils:
             async_write (bool): Whether to queue the command.
 
         Returns:
-            int: 0 if successful, otherwise an error code.
+            data (int): 0 if successful, otherwise an error code.
         """
         write = INST_REG_WRITE if async_write else INST_WRITE
         self.validate_register_value(reg, value)
@@ -331,7 +331,7 @@ class ServoWriteUtils:
             value (int): Value to write.
 
         Returns:
-            int: Result of the write.
+            data (int): Result of the write.
         """
         return self.set_register(reg, value, async_write=True)
 
@@ -386,7 +386,7 @@ class ServoWriteUtils:
             reverse (bool): Whether the speed is in reverse.
 
         Returns:
-            int: Result of the operation.
+            data (int): Result of the operation.
         """
         # if reverse:
         #   speed |= (1 << 15)
@@ -402,7 +402,7 @@ class ServoWriteUtils:
             speed (int, optional): Movement speed (ST model).
 
         Returns:
-            int: Result of the operation.
+            result (int): Result of the operation.
         """
         if position < 0:
             position = -position
@@ -428,7 +428,7 @@ class ServoWriteUtils:
             speed (int, optional): Speed value.
 
         Returns:
-            int: Result of the operation.
+            result (int): Result of the operation.
         """
         if position < 0:
             position = -position
@@ -486,7 +486,7 @@ class ST3215(ServoLowLevel, ServoReadUtils, ServoWriteUtils, HexUtils):
         Pings the servo to check if it is responsive.
 
         Returns:
-            int: 0 if successful, or an error code.
+            ping (int): 0 if successful, or an error code.
         """
         self.send_packet(INST_READ, [REG_ID, 0x01])
         return self.ack()
@@ -496,7 +496,7 @@ class ST3215(ServoLowLevel, ServoReadUtils, ServoWriteUtils, HexUtils):
         Returns the firmware and servo version.
 
         Returns:
-            dict: Firmware and servo version info.
+            version (dict): Firmware and servo version info.
         """
         firmware_major = self.read_register(REG_FIRMWARE_MAJOR_VERSION)
         firmware_minor = self.read_register(REG_FIRMWARE_SUB_VERSION)
@@ -509,7 +509,7 @@ class ST3215(ServoLowLevel, ServoReadUtils, ServoWriteUtils, HexUtils):
         Returns the register map of the servo.
 
         Returns:
-            dict: Register metadata.
+            metadata (dict): Register metadata.
         """
         return REG_MAP
 
