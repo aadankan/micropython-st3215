@@ -1,5 +1,43 @@
-# ST3215 Servo Micropython Module
-MicroPython ST3215 module provides a high-level API to communicate and control ST3215 servo/servos motors.
+# ST3215 Servo MicroPython Module
+
+The **MicroPython ST3215** module provides a high-level API to control ST3215 servo motors with ease.
+
+---
+
+## Wiring Diagram
+
+![Wiring Diagram](./wiring.jpg)
+
+---
+
+## Installation
+
+Install the module using `mip`:
+
+```python
+import mip
+mip.install("github:aadankan/micropython-st3215")
+```
+---
 
 ## Documentation
-📖 For complete documentation, visit: [Documentation site](https://aadankan.github.io/micropython-st3215/)
+
+📖 Complete documentation, including usage examples and API reference, is available at:
+
+[https://aadankan.github.io/micropython-st3215/](https://aadankan.github.io/micropython-st3215/)
+
+---
+
+## Features
+
+- Simple and Pythonic API
+- Supports multiple ST3215 servos
+- MicroPython compatible
+- Includes wiring and usage examples
+
+---
+
+## License
+
+MIT License
+
