@@ -51,7 +51,7 @@ class ServoLowLevel:
         self._id = id
 
     @property
-    def register(self):
+    def register(self) -> bytes:
         """
         Extracts and returns register value from response buffer.
 
@@ -65,7 +65,7 @@ class ServoLowLevel:
             raise ValueError("Buffer too short to extract value")
         return self.buf[5:-1]
 
-    def read_servo(self):
+    def read_servo(self) -> bytes:
         """
         Reads incoming data from the UART interface.
 
@@ -146,7 +146,7 @@ class ServoLowLevel:
         log(f"ID: {self.buf[2]}[{self.buf[2]:02X}]", )
         return self.buf[2]
 
-    def iterate_ping(self):
+    def iterate_ping(self) -> None:
         """
         Pings all possible servo IDs (1–254) to find connected servos.
 
