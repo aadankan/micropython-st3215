@@ -69,6 +69,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#get-servo-version" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -477,6 +482,19 @@
       
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Examples
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -488,6 +506,95 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#get-servo-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Servo Version
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ping-servo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ping Servo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get State
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Position
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#move-servo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Move Servo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#move-servo-with-acceleration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Move Servo with Acceleration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-new-servo-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set New Servo ID
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -511,6 +618,86 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#get-servo-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Servo Version
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ping-servo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ping Servo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get State
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get-position" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Position
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#move-servo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Move Servo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#move-servo-with-acceleration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Move Servo with Acceleration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-new-servo-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set New Servo ID
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -527,7 +714,124 @@
 
   <h1>Examples</h1>
 
+<h3 id="get-servo-version">Get Servo Version</h3>
+<pre><code>from st3215 import ST3215
 
+servo = ST3215()
+print(servo.version())
+</code></pre>
+<p>Returns:</p>
+<pre><code>{'firmware': '3.9', 'servo': '9.3'}
+</code></pre>
+<p>Raises:</p>
+<pre><code>ValueError: Failed to ping servo with ID 1. Error code: 1
+</code></pre>
+<hr />
+<h3 id="ping-servo">Ping Servo</h3>
+<pre><code>from st3215 import ST3215
+
+servo = ST3215()
+print(servo.ping())
+</code></pre>
+<p>Returns:</p>
+<pre><code>0  # Success
+</code></pre>
+<p>Raises:</p>
+<pre><code>ValueError: Failed to ping servo with ID 1. Error code: 1
+</code></pre>
+<hr />
+<h3 id="get-status">Get Status</h3>
+<pre><code>from st3215 import ST3215
+
+servo = ST3215()
+print(servo.get_status())
+</code></pre>
+<p>Returns a list of parameter dictionaries, e.g.:</p>
+<pre><code>[
+    {'unit': 'number', 'fn': 'Firmware major version number', 'value': 3},
+    {'unit': 'number', 'fn': 'Firmware sub version number', 'value': 9},
+    {'unit': 'number', 'fn': 'Servo Main Version Number', 'value': 9},
+    {'unit': 'number', 'fn': 'Servo sub version number', 'value': 3},
+    ...
+    {'unit': 'ms', 'fn': 'Over current protection time', 'value': -720},
+    {'unit': 'no', 'fn': 'Velocity closed loop I integral coefficient', 'value': -72}
+]
+</code></pre>
+<p>Raises:</p>
+<pre><code>ValueError: Failed to ping servo with ID 1. Error code: 1
+</code></pre>
+<hr />
+<h3 id="get-state">Get State</h3>
+<pre><code>from st3215 import ST3215
+
+servo = ST3215()
+print(servo.get_state())
+</code></pre>
+<p>Returns a list of runtime state values, e.g.:</p>
+<pre><code>[
+    {'unit': 'no', 'fn': 'Torque switch', 'value': 0},
+    {'unit': 'step/s^2', 'fn': 'Acceleration', 'value': 0},
+    {'unit': 'step', 'fn': 'Target location', 'value': 0},
+    {'unit': '%', 'fn': 'Running time', 'value': 0.0},
+    ...
+    {'unit': 'mA', 'fn': 'Current current', 'value': 0.0}
+]
+</code></pre>
+<p>Raises:</p>
+<pre><code>ValueError: Failed to ping servo with ID 1. Error code: 1
+</code></pre>
+<hr />
+<h3 id="get-position">Get Position</h3>
+<pre><code>from st3215 import ST3215
+
+servo = ST3215()
+print(servo.get_position())
+</code></pre>
+<p>Returns:</p>
+<pre><code>Integer between 0 and 4095
+</code></pre>
+<p>Raises:</p>
+<pre><code>ValueError: Failed to ping servo with ID 1. Error code: 1
+</code></pre>
+<hr />
+<h3 id="move-servo">Move Servo</h3>
+<pre><code>from st3215 import ST3215
+
+servo = ST3215()
+print(servo.move_target_location(4000, speed=1000))  # Move to position 4000 at speed 1000
+</code></pre>
+<p>Returns:</p>
+<pre><code>None (servo moves, no return value)
+</code></pre>
+<p>Raises:</p>
+<pre><code>ValueError: Failed to ping servo with ID 1. Error code: 1
+</code></pre>
+<hr />
+<h3 id="move-servo-with-acceleration">Move Servo with Acceleration</h3>
+<pre><code>from st3215 import ST3215
+
+servo = ST3215()
+print(servo.move_acceleration(0, acceleration=1, speed=800))  # Move to position 0 with acceleration
+</code></pre>
+<p>Returns:</p>
+<pre><code>None (servo moves, no return value)
+</code></pre>
+<p>Raises:</p>
+<pre><code>ValueError: Failed to ping servo with ID 1. Error code: 1
+</code></pre>
+<hr />
+<h3 id="set-new-servo-id">Set New Servo ID</h3>
+<pre><code>from st3215 import ST3215
+
+servo = ST3215(id=0, uart_num=1, tx_pin=19, rx_pin=18, baudrate=1000000)
+print(servo.set_id(5))  # Change servo ID to 5
+</code></pre>
+<p>Returns:</p>
+<pre><code>0  # Success
+</code></pre>
+<p>Raises:</p>
+<pre><code>ValueError: Failed to ping servo with ID 1. Error code: 1
+</code></pre>
 
 
 
