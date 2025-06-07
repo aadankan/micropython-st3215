@@ -512,13 +512,3 @@ class ST3215(ServoLowLevel, ServoReadUtils, ServoWriteUtils, HexUtils):
         """
         return REG_MAP
 
-
-
-if __name__ == "__main__":
-    servo = ST3215(id=15)
-    # print(servo.get_status())
-    # print(servo.get_state())
-    # print(servo.move_acceleration(0, acceleration=1, speed=800))
-    # print(servo.move_target_location(4000, speed=1000))
-    print(servo.version())
-
