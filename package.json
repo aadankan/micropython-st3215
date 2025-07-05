@@ -3,10 +3,9 @@
   "urls": [
     ["st3215/__init__.py", "github:aadankan/micropython-st3215/st3215/__init__.py"],
     ["st3215/high_level.py", "github:aadankan/micropython-st3215/st3215/high_level.py"],
-    ["st3215/low_level.py", "github:aadankan/micropython-st3215/st3215/low_level.py"],
-    ["github:josverl/micropython-stubs/mip/typing.py"]
+    ["st3215/low_level.py", "github:aadankan/micropython-st3215/st3215/low_level.py"]
   ],
   "deps": [
-    
+    "github:josverl/micropython-stubs/mip/typing.json"
   ]
 }
