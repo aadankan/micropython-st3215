@@ -6,6 +6,6 @@
     ["st3215/low_level.py", "github:aadankan/micropython-st3215/st3215/low_level.py"]
   ],
   "deps": [
-    ["github:josverl/micropython-stubs/mip/typing", "main"]
+    "github:josverl/micropython-stubs/mip/typing.py"
   ]
 }
