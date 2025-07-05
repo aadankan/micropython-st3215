@@ -4,7 +4,6 @@
     ["st3215/__init__.py", "github:aadankan/micropython-st3215/st3215/__init__.py"],
     ["st3215/high_level.py", "github:aadankan/micropython-st3215/st3215/high_level.py"],
     ["st3215/low_level.py", "github:aadankan/micropython-st3215/st3215/low_level.py"],
-    ["typing.py", "github:josverl/micropython-stubs/mip/typing.py"],
-    ["typing_extensions.py", "github:josverl/micropython-stubs/mip/typing.py"]
+    ["typing.py", "github:josverl/micropython-stubs/mip/typing.py"]
   ]
 }
